@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="de">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Q-SYS Formular</title>
+</head>
+
+<body>
+    <h2>Text an Q-SYS senden</h2>
+    <form id="qsysForm">
+        <label for="text1">TextControl1:</label>
+        <input type="text" id="text1" name="text1"><br><br>
+        <label for="text2">TextControl2:</label>
+        <input type="text" id="text2" name="text2"><br><br>
+        <label for="text3">TextControl3:</label>
+        <input type="text" id="text3" name="text3"><br><br>
+        <label for="text4">TextControl4:</label>
+        <input type="text" id="text4" name="text4"><br><br>
+        <button type="submit">Senden</button>
+    </form>
+
+    <script type="module">
+        import { Qrwc } from 'https://cdn.jsdelivr.net/npm/@q-sys/qrwc/+esm';
+
+        const coreIP = '192.168.0.108'; // ← Deine Core-IP hier eintragen
+        const socket = new WebSocket(`ws://${coreIP}/qrc-public-api/v0`);
+
+        socket.addEventListener('open', async () => {
+            const qrwc = await Qrwc.createQrwc({
+                socket,
+                pollingInterval: 350
+            });
+
+            document.getElementById('qsysForm').addEventListener('submit', async (e) => {
+                e.preventDefault();
+
+                const text1 = document.getElementById('text1').value;
+                const text2 = document.getElementById('text2').value;
+                const text3 = document.getElementById('text3').value;
+                const text4 = document.getElementById('text4').value;
+
+                try {
+                    const control1 = qrwc.components.TextControl1.controls['text.1'];
+                    const control2 = qrwc.components.TextControl1.controls['text.2'];
+                    const control3 = qrwc.components.TextControl1.controls['text.3'];
+                    const control4 = qrwc.components.TextControl1.controls['text.4'];
+
+                    await control1.update(text1);
+                    await control2.update(text2);
+                    await control3.update(text3);
+                    await control4.update(text4);
+
+                    alert('Text erfolgreich gesendet!');
+                } catch (err) {
+                    console.error('Fehler beim Senden:', err);
+                    alert('Fehler beim Senden. Siehe Konsole.');
+                }
+            });
+        });
+    </script>
+</body>
