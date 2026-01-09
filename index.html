@@ -21,10 +21,11 @@
         <button type="submit">Senden</button>
     </form>
 
+
     <script type="module">
         import { Qrwc } from 'https://cdn.jsdelivr.net/npm/@q-sys/qrwc/+esm';
 
-        const response = await fetch('https://unpermeating-audie-untransitorily.ngrok-free.dev', {
+        const response = await fetch('https://unpermeating-audie-untransitorily.ngrok-free.dev/send-text', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -68,6 +69,37 @@
             });
         });
     </script>
+
+
+    <!--
+        <script>
+        document.getElementById('qsysForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const data = {
+            text1: document.getElementById('text1').value,
+            text2: document.getElementById('text2').value,
+            text3: document.getElementById('text3').value,
+            text4: document.getElementById('text4').value
+        };
+        try {
+            const res = await fetch('https://unpermeating-audie-untransitorily.ngrok-free.dev/send-text', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer mein-geheimes-token'
+            },
+            body: JSON.stringify(data)
+            });
+            const json = await res.json();
+            alert(`Status: ${res.status} → ${JSON.stringify(json)}`);
+        } catch (err) {
+            alert('Fetch-Fehler: ' + (err?.message || err));
+            console.error(err);
+        }
+        });
+        </script>
+        -->
+
 </body>
 
 </html>
